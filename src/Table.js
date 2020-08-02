@@ -25,9 +25,15 @@ const TableBody = (props) => {
       return b - a
     }
   }
-
   props.todoThingDate.sort(compare('priority'))
 
+
+  // 修改数据
+  const clickChange = (row) => {
+    props.isComplete(false);
+    props.changePopContent(false);
+    props.modifyData(row);
+  }
   const rows = props.todoThingDate.map((row,index) => {
     return (
       <tr key={index} onClick={(e) =>{console.log(e);}}>
@@ -37,8 +43,8 @@ const TableBody = (props) => {
           <input type='checkbox' />
         </td>
         <td  style={{display: props.removeTodoThing === undefined ? 'none' : 'block'}}>
-          <button className="tableList-btn" type="button" onClick={() => {props.isComplete(false);props.changePopContent(false)}}>修改</button>
-          <button className="tableList-btn" onClick={ () => props.removeTodoThing(index)}>删除</button>
+          <button className="tableList-btn" type="button" onClick={() =>{clickChange(row)}}>修改</button>
+          <button className="tableList-btn" type="button" onClick={ () => props.removeTodoThing(index)}>删除</button>
           
         </td>
       </tr>
@@ -49,9 +55,10 @@ const TableBody = (props) => {
 
 
 const Table = (props) => {
-  const {todoThingDate,removeTodoThing,isComplete,changePopContent} = props
-  
 
+
+  const {todoThingDate,removeTodoThing,isComplete,changePopContent,modifyData} = props
+  
   return (
     <div className="tableList">
       <table>
@@ -64,6 +71,7 @@ const Table = (props) => {
         removeTodoThing={removeTodoThing}
         isComplete={isComplete}
         changePopContent={changePopContent}
+        modifyData={modifyData}
         />
       </table>
     </div>

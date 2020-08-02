@@ -10,10 +10,32 @@ class App extends Component{
   constructor(props) {
     super(props);
     this.state = {
-      todoThings: [],
+      todoThings: [
+        {
+          priority:'10',
+          task:'homework',
+        },
+        {
+          priority:'8',
+          task:'housework',
+        },
+        {
+          priority:'5',
+          task:'play a game',
+        },
+        {
+          priority:'4',
+          task:'have a rest',
+        }
+      ],
+      showSearch:false,
       complete:true,
       isLoaded:false,
       searchResult:[],
+      modifyData:{
+        priority:'',
+        task:'',
+      },
       popUpWhat:true
     };
   }
@@ -35,10 +57,20 @@ class App extends Component{
 
   // 请求数据
   getTodoListData = () => {
+    // 属性比较
+    const compare = (att) => {
+      return (m,n) => {
+        let a = m[att];
+        let b = n[att];
+        // 升序
+        return b - a
+      }
+    }
+
     axios.get('http://172.16.6.202:7300/mock/5f215dcba72c560020dfe6d0/example/reactdemo')
     .then((response) => {
       // console.log(response.data.data.todoList);
-      this.setState({todoThings:response.data.data.todoList})
+      this.setState({todoThings:response.data.data.todoList.sort(compare('priority'))})
     })
     .catch( (err) => {
       console.log(err);
@@ -56,9 +88,9 @@ class App extends Component{
       // todoThings:todoThings.filter((todoThing) => {
       //   return todoThing.task !== searchResult[index].task
       // }),
-      // searchResult:searchResult.filter((item,i) => {
-      //   return i !== index
-      // })
+      searchResult:searchResult.filter((item,i) => {
+        return i !== index
+      })
 
     })
   }
@@ -81,15 +113,33 @@ class App extends Component{
   // Search组件 查找方法
   handleSearch = (searchInput) => {
     const {todoThings} = this.state;
+    console.log(todoThings);
+    // this.setState({
+    //   searchResult:{...searchInput}
+    // })
     this.setState({
       searchResult:todoThings.filter((todoThing) => {
-        return Number.parseInt(todoThing.priority) === Number.parseInt(searchInput) 
-      })
+        return todoThing.priority.includes(searchInput.searchNumber) && todoThing.task.includes(searchInput.searchText)
+      }),
+      showSearch:true
     })
   }
+
+  // Modify组件 修改数据
+  modifyData = (todoThing) =>{
+    
+    this.setState({modifyData:{...todoThing}})
+    
+  }
+
+  handleModify = () => {
+
+  }
+
   // Search返回按钮 searchResult置空
   resetSearch = () => {
     this.setState({
+      
       searchResult:[]
     })
   }
@@ -101,7 +151,10 @@ class App extends Component{
         isComplete = {this.isComplete}
         />
     }else{
-      return <Modify/>
+      return <Modify 
+      modifyData = {this.state.modifyData}
+      isComplete = {this.isComplete}
+      />
     }
   }
   // 修改弹窗展示的判断条件
@@ -124,10 +177,11 @@ class App extends Component{
         changePopContent={this.changePopContent}
         />
         <Table  
-        todoThingDate = {todoThings} 
+        todoThingDate = {this.state.showSearch ? searchResult : todoThings } 
         removeTodoThing = {this.removeTodoThing}
         isComplete={this.isComplete} 
         changePopContent={this.changePopContent}
+        modifyData={this.modifyData}
         h1Str={`今日任务已完成👏👏👏`} />
         <PopUp  
         complete={complete} 
