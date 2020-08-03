@@ -44,8 +44,8 @@ class Search extends Component{
         <span>任务描述:</span>
         <input type='text' name='searchText' value={this.state.searchInput.task} onChange={this.searchInputChange} />
         <div className="search-btn">
-          <button type="button" onClick={this.props.getTodoListData}>重新导入</button>
-          <button type="button" onClick={() =>{this.props.resetSearch(); this.searchTodoThings()}}>搜索</button>
+          <button type="button" onClick={this.props.getTodoListData}>重置</button>
+          <button type="button" onClick={() =>{this.props.resetSearch(); this.searchTodoThings()}}>🔍搜索</button>
           <button type="button" onClick={this.setNewTask}>📝 新建</button>
         </div>
       </div>

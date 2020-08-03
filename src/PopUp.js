@@ -5,10 +5,14 @@ class PopUp extends Component{
   resetComplete = () => {
     this.props.isComplete(true)
   }
+
+
   render(){
-    console.log(typeof this.props.renderContent.type.name);
-    return(
-      <div className={`popUp ${this.props.complete ? null : 'popUp-show'} `}>
+    // console.log(typeof this.props.renderContent.type.name);
+    // if(this.state.visible) {
+      
+      return(
+        <div className={`popUp ${this.props.complete ? null : 'popUp-show'} `}>
         <div className='popUp-container' style={{visibility: this.props.complete ? "hidden" : "visible"}}>
           <div className={`popUp-content ${this.props.complete ? null : 'popUp-content-show'}`}>
             <span onClick={this.resetComplete}>✖</span>
@@ -22,13 +26,10 @@ class PopUp extends Component{
         </div>
       </div>
     )
+  // }else{
+  //   return null
+  // }
   }
 }
 
 export default PopUp
-
-// content = state == 1 ? Form : INput
-
-// <PopUp
-//   renderCOntent={<Form handleSubmit={this.props.handleSubmit}/>}
-// ></PopUp>

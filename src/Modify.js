@@ -1,18 +1,38 @@
 import React,{Component} from 'react'
 
 class Modify extends Component{
-  Modify = {
-    priority:'',
-    task:'',
-  }
+  // Modify = {
+  //   priority:'',
+  //   task:'',
+  // }
+
   constructor(props) {
     super(props);
     
     this.state = {
+      id: this.props.modifyData.id,
       priority:this.props.modifyData.priority,
       task:this.props.modifyData.task,
     }
   }
+
+  static getDerivedStateFromProps(newProps, oldState){
+    if(newProps.modifyData.id !== oldState.id) {
+      // this.setState({
+      //   id: this.props.modifyData.id,
+      //   priority:this.props.modifyData.priority,
+      //   task:this.props.modifyData.task,
+      // })
+      return {
+        id: newProps.modifyData.id,
+        priority:newProps.modifyData.priority,
+        task:newProps.modifyData.task,
+      }
+    }else{
+      return null;
+    }
+  }
+
   
   modifyData = (event) => {
     const {name,value} = event.target
@@ -23,8 +43,11 @@ class Modify extends Component{
 
   submitModify = () => {
     this.props.isComplete(true)
-    console.log(this.state);
+    this.props.handleModify(this.state)
   }
+
+
+
 
   render(){
     

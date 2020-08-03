@@ -34,17 +34,21 @@ const TableBody = (props) => {
     props.changePopContent(false);
     props.modifyData(row);
   }
-  const rows = props.todoThingDate.map((row,index) => {
+
+  const clickToComplete = (row) => {
+    props.handleChecked(row);
+  }
+  const rows = props.todoThingDate.map((row) => {
     return (
-      <tr key={index} onClick={(e) =>{console.log(e);}}>
+      <tr key={row.id} >
         <td>{row.priority}</td>
-        <td>{row.task}</td>
+        <td style={{textDecoration:row.accomplish ? 'line-through':'none'}}>{row.task}</td>
         <td>
-          <input type='checkbox' />
+          <input type='checkbox' checked={row.accomplish} onChange={() => {clickToComplete(row)}}/>
         </td>
         <td  style={{display: props.removeTodoThing === undefined ? 'none' : 'block'}}>
           <button className="tableList-btn" type="button" onClick={() =>{clickChange(row)}}>修改</button>
-          <button className="tableList-btn" type="button" onClick={ () => props.removeTodoThing(index)}>删除</button>
+          <button className="tableList-btn" type="button" onClick={ () => props.removeTodoThing(row.id)}>删除</button>
           
         </td>
       </tr>
@@ -54,17 +58,26 @@ const TableBody = (props) => {
 }
 
 
+
+
+
+
+
+
+
+
 const Table = (props) => {
 
 
-  const {todoThingDate,removeTodoThing,isComplete,changePopContent,modifyData} = props
+  const {todoThingDate,removeTodoThing,isComplete,changePopContent,modifyData,showLoading,searchResult,handleChecked} = props
   
   return (
     <div className="tableList">
       <table>
-        <caption style={{display: todoThingDate.length === 0 ? "table-row-group" : "none"}}>
+        {/* <caption style={{display: todoThingDate.length === 0 ^ showLoading ? "table-row-group" : "none"}}>
           {props.h1Str}
-        </caption>
+        </caption> */}
+        <caption style={{display: (todoThingDate.length === 0 && searchResult.length === 0) ^ showLoading ? "table-row-group" : "none"}} >暂无数据</caption>
         <TableHeader todoThingDate={todoThingDate} removeTodoThing={removeTodoThing}/>
         <TableBody 
         todoThingDate={todoThingDate} 
@@ -72,6 +85,7 @@ const Table = (props) => {
         isComplete={isComplete}
         changePopContent={changePopContent}
         modifyData={modifyData}
+        handleChecked={handleChecked}
         />
       </table>
     </div>
